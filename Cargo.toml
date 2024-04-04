@@ -1,0 +1,14 @@
+[package]
+name = "organize_files"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+lto = true
+strip = true
+
+[dependencies]
+dirs = "5.0.1"
+
+[target.x86_64-pc-windows-gnu]
+linker = 'x86_64-w64-mingw32-gcc'
