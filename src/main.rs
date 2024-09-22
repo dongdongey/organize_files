@@ -119,17 +119,16 @@ fn work(file_name: &Path) -> Result<(), ()> {
         }
     };
 
-    //println!("{:?}", size);
-
     let new_path = distinguish_by_size(size);
     let new_path = new_path.join(file_name);
     fs::rename(file_name, new_path).unwrap();
     Ok(())
 }
+
 //사진의 비율이 카메라면 picturs로 아니면 others로
-fn distinguish_by_size(size: Vec<i32>) -> PathBuf {
-    let width = size[0];
-    let height = size[1];
+fn distinguish_by_size(size: (i32, i32)) -> PathBuf {
+    let width = size.0;
+    let height = size.1;
 
     let ratio: f32 = width as f32 / height as f32;
 
@@ -142,7 +141,7 @@ fn distinguish_by_size(size: Vec<i32>) -> PathBuf {
     }
 }
 
-fn get_size_from_command(file_name: &Path) -> Result<Vec<i32>, ()> {
+fn get_size_from_command(file_name: &Path) -> Result<(i32, i32), ()> {
     let child = Command::new("ffprobe")
         .args([
             "-v",
@@ -179,5 +178,5 @@ fn get_size_from_command(file_name: &Path) -> Result<Vec<i32>, ()> {
     let width: i32 = FromStr::from_str(size.0).unwrap();
     let height: i32 = FromStr::from_str(size.1).unwrap();
 
-    Ok(vec![width, height])
+    Ok((width, height))
 }
